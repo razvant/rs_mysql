@@ -4,5 +4,6 @@
   "long_description": "",
   "maintainer": "Stratalux, Inc.",
   "maintainer_email": "razvan.tomescu@stratalux.com",
-  "license": "Copyright Stratalux, Inc. All rights reserved."
+  "license": "Copyright Stratalux, Inc. All rights reserved.",
+  "version": "1.0.0"
 }
