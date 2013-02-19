@@ -5,5 +5,33 @@
   "maintainer": "Stratalux, Inc.",
   "maintainer_email": "razvan.tomescu@stratalux.com",
   "license": "Copyright Stratalux, Inc. All rights reserved.",
-  "version": "1.0.0"
+  "version": "1.0.0",
+  "attributes": {
+    "aws/user": {
+      "display_name": "AWS Username",
+      "description": "The username of the AWS account. Example: cred:AWS_USER.",
+      "required": "required",
+      "recipes": [
+        "db::do_init_and_become_master"
+      ],
+      "choice": [
+
+      ],
+      "calculated": false,
+      "type": "string"
+    },
+    "aws/password": {
+      "display_name": "AWS Password",
+      "description": "The password of the AWS account. Example: cred:AWS_PASSWORD.",
+      "required": "required",
+      "recipes": [
+        "db::do_init_and_become_master"
+      ],
+      "choice": [
+
+      ],
+      "calculated": false,
+      "type": "string"
+    }
+  }
 }
