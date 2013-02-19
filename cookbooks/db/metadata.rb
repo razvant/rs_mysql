@@ -21,3 +21,7 @@ attribute "aws/password",
   :recipes => [ 
        "db::do_init_and_become_master" 
   ]
+
+recipe "db::do_init_and_become_master",
+  "Initializes the database and tags it as the master database server." +
+  " Sets DNS. Starts a fresh backup from this master."

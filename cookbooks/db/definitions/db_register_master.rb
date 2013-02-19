@@ -16,8 +16,8 @@ define :db_register_master do
 
   log ">>>>>>>>>>>>>>>>>>>>> MASTER ID is #{node[:db][:dns][:master][:id]}" 
   sys_dns "default" do
-    user [:AWS][:USER]
-    password [:AWS][:PASSWORD]
+    user node[:aws][:user]
+    password node[:aws][:password]
     id node[:db][:dns][:master][:id]
     address private_ip
     action :set_private
