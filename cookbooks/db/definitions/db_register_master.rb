@@ -24,6 +24,9 @@ define :db_register_master do
   bind_ip = get_local_replication_interface
   log "  Setting master database #{node[:db][:dns][:master][:fqdn]}" +
     " to #{bind_ip}"
+
+  log ">>>>>>>>>>>>>>>>>>>>> MASTER ID is #{node[:db][:dns][:master][:id]}" 
+
   # See cookbooks/sys_dns/providers/*.rb for the "set" action.
   sys_dns "default" do
     id node[:db][:dns][:master][:id]
