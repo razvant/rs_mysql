@@ -1,0 +1,27 @@
+{
+  "name": "sys_dns",
+  "description": "Installs/Configures sys_dns",
+  "long_description": "Stratalux description",
+  "maintainer": "Stratalux, Inc.",
+  "maintainer_email": "razvan.tomescu@stratalux.com",
+  "license": "Copyright Stratalux, Inc. All rights reserved.",
+  "platforms": {
+  },
+  "recommendations": {
+  },
+  "suggestions": {
+  },
+  "conflicting": {
+  },
+  "providing": {
+  },
+  "replacing": {
+  }
+  "groupings": {
+  },
+  "recipes": {
+    "sys_dns::default": "Installs tools needed by chosen DNS provider.",
+    "sys_dns::do_set_private": "Sets the dynamic DNS entry to the first private IP of the server."
+  },
+  "version": "1.0.0"
+}
