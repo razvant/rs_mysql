@@ -72,8 +72,8 @@ EOF
         
         ## And if not, set a flag to create the A record
         if currentARecordValue==nil || currentARecordValue == ""
-          log "Could not find A RR for #{hostname}."
-          log "Creating initial record"
+          @logger.info("Could not find A RR for #{hostname}.")
+          @logger.info("Creating initial record")
           delete_record = false
         end
 
