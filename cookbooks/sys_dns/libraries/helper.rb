@@ -66,12 +66,12 @@ EOF
  
         log " currentARecordValue >>>>>>>>>>>>>>>>>>>> #{currentARecordValue}"
 
-        CREATE_INITIAL=false
+        CREATE_INITIAL="false"
         ## And if not, set a flag to create the A record
         if currentARecordValue!=nil && currentARecordValue != "" then
           log "Could not find A RR for $myHostName.$myDomainName."
           log "Creating initial record"
-          CREATE_INITIAL=true
+          CREATE_INITIAL="true"
         end
 
         log " CREATE_INITIAL >>>>>>>>>>>>>>>>>>>> #{CREATE_INITIAL}"
