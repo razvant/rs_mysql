@@ -124,7 +124,7 @@ if delete_record == true
           <TTL>#{ttl}</TTL>
           <ResourceRecords>
             <ResourceRecord>
-              <Value>#{current_ip}</Value>
+              <Value>#{currentARecordValue}</Value>
             </ResourceRecord>
           </ResourceRecords>
         </ResourceRecordSet>
