@@ -56,25 +56,27 @@ EOF
         xml_doc = "https://route53.amazonaws.com/doc/2010-10-01/"
         ttl = 60
         record_type = 'A'
+        create_initial = false
 
         ## Check to see if the A record already exists
-        currentARecordValueSearch="ListResourceRecordSetsResponse/ResourceRecordSets/ResourceRecordSet[Name=\"#{hostname}.\"]/ResourceRecords/ResourceRecord/Value"
+        currentARecordValueSearch = "ListResourceRecordSetsResponse/ResourceRecordSets/ResourceRecordSet[Name=\"#{hostname}.\"]/ResourceRecords/ResourceRecord/Value"
 
-        log " currentARecordValueSearch >>>>>>>>>>>>>>>>>>>> #{currentARecordValueSearch}"
+        @logger.info(" currentARecordValueSearch >>>>>>>>>>>>>>>>>>>> #{currentARecordValueSearch}")
 
-        currentARecordValue=`/opt/rightscale/dns/dnscurl.pl --keyfile #{secrets_filename} --keyname my-aws-account -- -s -H "Content-Type: text/xml; charset=UTF-8" -X GET #{endpoint}hostedzone/#{zone_id}/rrset 2>/dev/null | xpath -e $currentARecordValueSearch 2>/dev/null | awk -F'[<|>]' '/Value/{print $3}' | cut -d/ -f3`
+        currentARecordValue = `/opt/rightscale/dns/dnscurl.pl --keyfile #{secrets_filename} --keyname my-aws-account -- -s -H "Content-Type: text/xml; charset=UTF-8" -X GET #{endpoint}hostedzone/#{zone_id}/rrset 2>/dev/null | xpath -e $currentARecordValueSearch 2>/dev/null | awk -F'[<|>]' '/Value/{print $3}' | cut -d/ -f3`
  
-        log " currentARecordValue >>>>>>>>>>>>>>>>>>>> #{currentARecordValue}"
+        @logger.info(" currentARecordValue >>>>>>>>>>>>>>>>>>>> #{currentARecordValue}")
 
-        CREATE_INITIAL="false"
+        
+
         ## And if not, set a flag to create the A record
-        if currentARecordValue!=nil && currentARecordValue != "" then
-          log "Could not find A RR for $myHostName.$myDomainName."
+        if currentARecordValue!=nil && currentARecordValue != ""
+          log "Could not find A RR for #{hostname}."
           log "Creating initial record"
-          CREATE_INITIAL="true"
+          create_initial = true
         end
 
-        log " CREATE_INITIAL >>>>>>>>>>>>>>>>>>>> #{CREATE_INITIAL}"
+        @logger.info(" create_initial >>>>>>>>>>>>>>>>>>>> #{create_initial}")
 
         modify_cmd=<<EOF
 <?xml version="1.0" encoding="UTF-8"?>
