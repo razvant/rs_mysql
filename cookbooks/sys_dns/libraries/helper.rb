@@ -56,7 +56,12 @@ EOF
         xml_doc = "https://route53.amazonaws.com/doc/2010-10-01/"
         ttl = 60
         record_type = 'A'
-        create_initial = false
+        delete_record = true
+
+        e = package "libxml-xpath-perl"  do
+          action :nothing
+        end
+        e.run_action(:install)
 
         ## Check to see if the A record already exists
         currentARecordValueSearch = "ListResourceRecordSetsResponse/ResourceRecordSets/ResourceRecordSet[Name=\"#{hostname}.\"]/ResourceRecords/ResourceRecord/Value"
@@ -68,15 +73,14 @@ EOF
         @logger.info(" currentARecordValue >>>>>>>>>>>>>>>>>>>> #{currentARecordValue}")
 
         
-
         ## And if not, set a flag to create the A record
-        if currentARecordValue!=nil && currentARecordValue != ""
+        if currentARecordValue==nil || currentARecordValue == ""
           log "Could not find A RR for #{hostname}."
           log "Creating initial record"
-          create_initial = true
+          delete_record = false
         end
 
-        @logger.info(" create_initial >>>>>>>>>>>>>>>>>>>> #{create_initial}")
+        @logger.info(" delete_record >>>>>>>>>>>>>>>>>>>> #{delete_record}")
 
         modify_cmd=<<EOF
 <?xml version="1.0" encoding="UTF-8"?>
@@ -86,7 +90,6 @@ EOF
     Modified by RightScale
     </Comment>
     <Changes>
-      
       <Change>
         <Action>CREATE</Action>
         <ResourceRecordSet>
@@ -104,6 +107,51 @@ EOF
   </ChangeBatch>
 </ChangeResourceRecordSetsRequest>
 EOF
+
+
+if delete_record == true
+
+        modify_cmd=<<EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<ChangeResourceRecordSetsRequest xmlns="#{xml_doc}">
+  <ChangeBatch>
+<Comment>
+    Modified by RightScale
+    </Comment>
+    <Changes>
+      <Change>
+        <Action>DELETE</Action>
+        <ResourceRecordSet>
+          <Name>#{hostname}.</Name>
+          <Type>#{record_type}</Type>
+          <TTL>#{ttl}</TTL>
+          <ResourceRecords>
+            <ResourceRecord>
+              <Value>#{current_ip}</Value>
+            </ResourceRecord>
+          </ResourceRecords>
+        </ResourceRecordSet>
+      </Change>
+      <Change>
+        <Action>CREATE</Action>
+        <ResourceRecordSet>
+          <Name>#{hostname}.</Name>
+          <Type>#{record_type}</Type>
+          <TTL>#{ttl}</TTL>
+          <ResourceRecords>
+            <ResourceRecord>
+              <Value>#{address}</Value>
+            </ResourceRecord>
+          </ResourceRecords>
+        </ResourceRecordSet>
+      </Change>
+    </Changes>
+  </ChangeBatch>
+</ChangeResourceRecordSetsRequest>
+EOF
+
+end 
+
         cmd_filename="/tmp/modify.xml"
 
         @logger.info("Changing IP for '#{hostname}' from '#{current_ip}' to '#{address}'")
