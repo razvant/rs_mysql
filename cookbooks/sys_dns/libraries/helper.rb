@@ -57,6 +57,25 @@ EOF
         ttl = 60
         record_type = 'A'
 
+        ## Check to see if the A record already exists
+        currentARecordValueSearch="ListResourceRecordSetsResponse/ResourceRecordSets/ResourceRecordSet[Name=\"#{hostname}.\"]/ResourceRecords/ResourceRecord/Value"
+
+        log " currentARecordValueSearch >>>>>>>>>>>>>>>>>>>> #{currentARecordValueSearch}"
+
+        currentARecordValue=`/opt/rightscale/dns/dnscurl.pl --keyfile #{secrets_filename} --keyname my-aws-account -- -s -H "Content-Type: text/xml; charset=UTF-8" -X GET #{endpoint}hostedzone/#{zone_id}/rrset 2>/dev/null | xpath -e $currentARecordValueSearch 2>/dev/null | awk -F'[<|>]' '/Value/{print $3}' | cut -d/ -f3`
+ 
+        log " currentARecordValue >>>>>>>>>>>>>>>>>>>> #{currentARecordValue}"
+
+        CREATE_INITIAL=false
+        ## And if not, set a flag to create the A record
+        if currentARecordValue!=nil && currentARecordValue != "" then
+          log "Could not find A RR for $myHostName.$myDomainName."
+          log "Creating initial record"
+          CREATE_INITIAL=true
+        end
+
+        log " CREATE_INITIAL >>>>>>>>>>>>>>>>>>>> #{CREATE_INITIAL}"
+
         modify_cmd=<<EOF
 <?xml version="1.0" encoding="UTF-8"?>
 <ChangeResourceRecordSetsRequest xmlns="#{xml_doc}">

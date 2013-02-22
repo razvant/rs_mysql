@@ -12,9 +12,9 @@ define :db_register_master do
   # Set master DNS
   # Do this first so that DNS can propagate while the recipe runs
   private_ip = node[:cloud][:private_ips][0]
-  log "  Setting master database #{node[:db][:dns][:master][:fqdn]} to #{private_ip}"
+  log " Setting master database #{node[:db][:dns][:master][:fqdn]} to #{private_ip}"
 
-  log ">>>>>>>>>>>>>>>>>>>>> MASTER ID is #{node[:db][:dns][:master][:id]}" 
+  log " DB DNS MASTER ID is #{node[:db][:dns][:master][:id]}" 
   sys_dns "default" do
     user node[:aws][:user]
     password node[:aws][:password]
