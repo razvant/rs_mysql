@@ -58,10 +58,7 @@ EOF
         record_type = 'A'
         delete_record = true
 
-        e = package "libxml-xpath-perl"  do
-          action :nothing
-        end
-        e.run_action(:install)
+        `apt-get install libxml-xpath-perl -y`
 
         ## Check to see if the A record already exists
         currentARecordValueSearch = "ListResourceRecordSetsResponse/ResourceRecordSets/ResourceRecordSet[Name=\"#{hostname}.\"]/ResourceRecords/ResourceRecord/Value"
