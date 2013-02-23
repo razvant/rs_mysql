@@ -65,7 +65,7 @@ EOF
 
         @logger.info(" currentARecordValueSearch >>>>>>>>>>>>>>>>>>>> #{currentARecordValueSearch}")
 
-        currentARecordValue = `/opt/rightscale/dns/dnscurl.pl --keyfile #{secrets_filename} --keyname my-aws-account -- -s -H "Content-Type: text/xml; charset=UTF-8" -X GET #{endpoint}hostedzone/#{zone_id}/rrset 2>/dev/null | xpath -e #{currentARecordValueSearch} 2>/dev/null | awk -F'[<|>]' '/Value/{print $3}' | cut -d/ -f3`
+        currentARecordValue = `/opt/rightscale/dns/dnscurl.pl --keyfile #{secrets_filename} --keyname my-aws-account -- -s -H "Content-Type: text/xml; charset=UTF-8" -X GET #{endpoint}hostedzone/#{zone_id}/rrset 2>/dev/null | xpath -e "#{currentARecordValueSearch} 2>/dev/null | awk -F'[<|>]' '/Value/{print $3}' | cut -d/ -f3`
  
         @logger.info(" currentARecordValue >>>>>>>>>>>>>>>>>>>> #{currentARecordValue}")
 
