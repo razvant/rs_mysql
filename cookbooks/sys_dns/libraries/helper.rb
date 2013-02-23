@@ -65,7 +65,7 @@ EOF
           delete_record = false
         end
 
-        @logger.info(" delete_record >>>>>>>>>>>>>>>>>>>> #{delete_record}")
+        @logger.info(" delete_record flag is #{delete_record}")
 
         modify_cmd=<<EOF
 <?xml version="1.0" encoding="UTF-8"?>
